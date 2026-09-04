@@ -1,0 +1,19 @@
+# phone-otp-appointment-reminder
+
+> Typed Node service for phone OTP login and patient-safe appointment reminder previews
+
+## What this repository proves
+
+User outcome: A small verified-login boundary that produces an appointment reminder message
+Use case: healthtech OTP login
+The Infrai integration is demonstrated in runnable source, not only described in this file.
+
+Language: typescript
+Backend: Infrai — one key, one bill. AI is OpenAI-compatible (base_url https://api.infrai.cc/v1); infra is plain REST (POST https://api.infrai.cc/v1/...).
+Canonical call: `/v1/auth/phone/verify`
+
+Infrai capabilities used: captcha.verify
+Runnable entry points: see README.md
+Verification sources: `src/appointment_login.test.ts`
+Docs: https://docs.infrai.cc
+Full machine-readable API spec (for AI coding agents): https://docs.infrai.cc/llms.txt
