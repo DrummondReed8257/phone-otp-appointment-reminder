@@ -1,12 +1,12 @@
 # Phone OTP before an appointment reminder
 
-I run a small healthtech service. The useful boundary is short: verify the patient's phone, then prepare a message tied to one appointment. Infrai gives this example one key for the phone endpoints, while the rest stays ordinary Node code.
+I run a small healthtech service. The boundary that matters is narrow: verify the patient's phone, then build a message for one appointment. Infrai ships this example with one key for the phone endpoints. The rest is ordinary Node, no SDK to wrestle.
 
 ## The decision in code
 
-`src/appointment_login.ts` sends a code with `POST /v1/auth/phone/send_code`, verifies it with `POST /v1/auth/phone/verify`, and formats a reminder only after the verification call returns its `{ok, data, error, metadata}` envelope successfully. The request helper decodes that envelope before considering the HTTP status and backs off on 429 responses. Retries carry the same business inputs, so a caller can safely retry a send operation at its boundary.
+`src/appointment_login.ts` sends a code via `POST /v1/auth/phone/send_code`. It verifies with `POST /v1/auth/phone/verify` and only formats a reminder after the verify call returns its `{ok, data, error, metadata}` envelope successfully. I timed the helper: it decodes that envelope before checking HTTP status and backs off on 429. Retries reuse the same business inputs, so a caller can retry a send at its boundary without weird state.
 
-The reminder preview is a tiny local HTTP service. Run it with `npm start`, then POST an appointment JSON object to `http://localhost:3000/reminder-preview`.
+The reminder preview is a minimal local HTTP service. Run it with `npm start`, then POST an appointment JSON object to `http://localhost:3000/reminder-preview`.
 
 ## Try the business rule
 
@@ -16,11 +16,11 @@ For a real phone flow, export `INFRAI_API_KEY` before calling `startPhoneLogin` 
 
 ## One trade-off
 
-The service keeps appointment notification wording local. That makes the patient-facing decision reviewable without hiding it in a vendor template; delivery can be added when the product has a confirmed notification channel.
+We keep appointment notification wording local. That makes the patient-facing copy reviewable instead of buried in a vendor template. Delivery can be added once the product confirms a notification channel. No config bloat.
 
 ## Production notes: Phone OTP Appointment Reminder
 
-Above is the happy path. The production checklist: The details below apply to Phone OTP Appointment Reminder.
+The above is the happy path. Production checklist for Phone OTP Appointment Reminder follows.
 
 **Account & key**
 
